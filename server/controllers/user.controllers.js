@@ -7,6 +7,9 @@ import generateRefreshToken from "../utils/generateRefreshToken.js";
 import uploadImageCloudinary from "../utils/uploadImageCloudinary.js";
 import generateOtp from "../utils/generateOtp.js";
 import forgotPasswordTemplate from "../utils/forgotPasswordTemplate.js";
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+dotenv.config()
 
 //New User Registration
 export async function registerUserControllers(request,response) {
@@ -430,5 +433,58 @@ export async function resetPasswordController(request,response) {
             error : true,
             success : false
         })        
+    }    
+}
+
+//Refresh Token Controller
+export async function refreshTokenController(request,response) {
+    try {
+        const refreshToken = request.cookies.refreshToken || request?.header?.authorization?.split(" ")[1];
+
+        if(!refreshToken){
+            return response.status(401).json({
+                message : "Invalid Token",
+                error : true,
+                success : false
+            })
+        }
+
+        const verifyToken = await jwt.verify(refreshToken,process.env.SECRET_KEY_REFRESH_TOKEN);
+
+        if(!verifyToken){
+            return response.status(401).json({
+                message : "Token is expired",
+                error : true,
+                success : false
+            })
+        }
+
+        console.log("verifyToken",verifyToken);
+        const userId = verifyToken?._id;
+
+        const newAccessToken = await generateAccessToken(userId);
+
+        const cookiesOption = {
+            httpOnly : true,
+            secure : true,
+            sameSite : "None"
+        }
+
+        response.cookie('accessToken',newAccessToken,cookiesOption);
+        return response.json({
+            message : "New Access token generated",
+            error : false,
+            success : true,
+            data : {
+                accessToken : newAccessToken
+            }
+        })
+        //console.log("refreshToken",refreshToken);
+    } catch (error) {
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : true
+        })
     }    
 }
