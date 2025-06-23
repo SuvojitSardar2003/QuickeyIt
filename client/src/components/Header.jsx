@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import SearchBar from "./SearchBar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import useMobile from "../hooks/useMobile";
+import { BsCart4 } from "react-icons/bs";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const redirectToLoginPage = () => {
+    navigate("/login");
+  };
+
   const [isMobile] = useMobile();
   console.log("isMobile", isMobile);
 
@@ -22,8 +28,8 @@ const Header = () => {
 
   return (
     <>
-      <header className="h-25 lg:h-20 lg:shadow-md sticky top-0 bg-red-500 ">
-        <div className="container mx-auto flex items-center lg:h-20 h-13 px-2 justify-between">
+      <header className="h-28 lg:h-20 lg:shadow-md sticky top-0 bg-white">
+        <div className="container mx-auto flex items-center lg:h-20 h-15 px-2 justify-between">
           {/*logo*/}
           <div className="lg:h-full">
             <Link to={"/"} className="h-full flex justify-center items-center">
@@ -48,12 +54,34 @@ const Header = () => {
           <div className="hidden lg:block">
             <SearchBar></SearchBar>
           </div>
+
           {/*login and my cart*/}
           <div>
+            {/*User Icon only in Mobile Version */}
             <button className="text-neutral-800 lg:hidden">
-              <FaRegUserCircle size={30} />
+              <FaRegUserCircle size={30} onClick={redirectToLoginPage} />
             </button>
-            <div className="hidden lg:block">Login and my cart</div>
+
+            {/*For Desktop Version */}
+            <div className="hidden lg:flex items-center gap-10 justify-center ">
+              <button onClick={redirectToLoginPage} className="text-lg px-2">
+                Login
+              </button>
+
+              {/*h-14 w-28*/}
+              <button className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-1">
+                <div className="flex items-center">
+                  {/*add to cart icon*/}
+                  <div>
+                    <BsCart4 size={26} className="hover:animate-bounce" />
+                  </div>
+                  <div className="font-semibold">
+                    <p>1 items</p>
+                    <p>total price</p>
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
 

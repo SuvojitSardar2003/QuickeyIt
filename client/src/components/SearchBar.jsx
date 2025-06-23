@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
+import { FaArrowLeft } from "react-icons/fa";
+import useMobile from "../hooks/useMobile";
 
 const SearchBar = () => {
+  const [isMobile] = useMobile();
+
   /*i can use usenaviage() instead of using <a></a> tag :*/
   const navigate = useNavigate();
   const redirectToSearchPage = () => {
@@ -28,15 +32,27 @@ const SearchBar = () => {
         onClick={redirectToSearchPage}
         //href="/search"
         /*className="w-full min-w-[500px] lg:min-w[420px] h-10 rounded-lg border overflow-hidden flex items-center text-neutral-500 bg-slate-50"*/
-        className={`w-full min-w-[500px] lg:min-w-[420px] h-10 lg:h-10 rounded-lg border overflow-hidden flex items-center px-3 text-neutral-500 bg-slate-50 transition-all duration-200 cursor-text ${
+        className={` lg:min-w-[420px] h-10 lg:h-10 rounded-lg border overflow-hidden flex items-center px-3 text-neutral-500 bg-slate-50 transition-all duration-200 cursor-text ${
           isSearchPage ? "border-black bg-white shadow-md text-black" : ""
         }`}
       >
         <div>
-          <IoSearch
-            /*className={`${isSearchPage ? "text-black" : "text-neutral-500"}`}*/
-            className="text-black m-3 p-0"
-          />
+          {(!isSearchPage || (isSearchPage && !isMobile)) && (
+            <IoSearch
+              /*className={`${isSearchPage ? "text-black" : "text-neutral-500"}`}*/
+              className="text-black m-3 p-0"
+            />
+          )}
+
+          {isSearchPage && isMobile && (
+            <FaArrowLeft
+              className=" text-black m-3 p-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/");
+              }}
+            />
+          )}
         </div>
 
         <div className="text-sm" /*text-sm font-medium*/>
