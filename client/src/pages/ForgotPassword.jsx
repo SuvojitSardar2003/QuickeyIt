@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../utils/Axios";
@@ -7,18 +6,15 @@ import AxiosToastError from "../utils/AxiosToastError";
 import useMobile from "../hooks/useMobile";
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
   const [isMobile] = useMobile();
 
   const [data, setData] = useState({
     email: "",
-    password: "",
   });
 
   const validValue = Object.values(data).every((el) => el);
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +31,7 @@ const Login = () => {
 
     try {
       const response = await Axios({
-        ...SummaryApi.login,
+        ...SummaryApi.forgotPassword,
         data: data,
       });
       if (response.data.error) {
@@ -45,9 +41,10 @@ const Login = () => {
         toast.success(response.data.message);
         setData({
           email: "",
-          password: "",
         });
-        navigate("/");
+        navigate("/verify-forgot-password-otp", {
+          state: data,
+        });
       }
       console.log(response);
     } catch (error) {
@@ -57,7 +54,9 @@ const Login = () => {
   return (
     <section className="container w-full mx-auto px-4">
       <div className=" bg-white w-full my-4 max-w-lg mx-auto rounded-xl border p-6 ">
-        <p className="mx-auto flex justify-center">Welcome to QuickeyIt</p>
+        <p className="mx-auto flex justify-center font-semibold text-lg ">
+          Forgot Password
+        </p>
         <form className="py-2  grid gap-4" onSubmit={handleSubmit}>
           {/*Name Field*/}
 
@@ -78,34 +77,6 @@ const Login = () => {
 
           {/*Password Field*/}
 
-          <div className="grid gap-1">
-            <label htmlFor="password">Password:</label>
-            <div className="bg-blue-50 p-2 rounded-xl flex justify-between items-center border  focus-within:border-2 focus-within:border-black">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                id="password"
-                className="w-full outline-none"
-                value={data.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                className="text-black cursor-pointer"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                {showPassword ? <FaEye /> : <FaEyeSlash />}
-              </button>
-            </div>
-            <Link
-              to={"/forgot-password"}
-              className="block ml-auto hover:text-amber-300"
-            >
-              Forgot password?
-            </Link>
-          </div>
-
           {/*Confirm Password Field*/}
 
           {/*submit*/}
@@ -119,18 +90,18 @@ const Login = () => {
               validValue ? "font-semibold" : ""
             } tracking-wide text-white`}
           >
-            Login
+            Send OTP
           </button>
           {/*</div>*/}
         </form>
 
         <p>
-          Don't have account?{" "}
+          Already have account?{" "}
           <Link
-            to={"/register"}
+            to={"/login"}
             className="font-semibold text-green-600 hover:text-green-800"
           >
-            Register
+            Login
           </Link>
         </p>
       </div>
@@ -138,4 +109,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
