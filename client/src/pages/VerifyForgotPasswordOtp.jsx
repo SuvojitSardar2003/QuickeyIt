@@ -51,7 +51,12 @@ const VerifyForgotPasswordOtp = () => {
       if (response.data.success) {
         toast.success(response.data.message);
         setData(["", "", "", "", "", ""]);
-        navigate("/");
+        navigate("/reset-password", {
+          state: {
+            data: response.data,
+            email: email,
+          },
+        });
       }
       console.log(response);
     } catch (error) {
@@ -110,7 +115,7 @@ const VerifyForgotPasswordOtp = () => {
                         e.target.nextSibling.focus();
                       }
                     }}
-                    /*onKeyDown={(e) => {
+                    onKeyDown={(e) => {
                       if (
                         e.key === "Backspace" &&
                         !data[i] &&
@@ -122,8 +127,8 @@ const VerifyForgotPasswordOtp = () => {
                         setData(newData);
                         e.target.previousElementSibling.focus();
                       }
-                    }}*/
-                    /*onPaste={(e) => {
+                    }}
+                    onPaste={(e) => {
                       if (i === 0) {
                         e.preventDefault();
                         const paste = e.clipboardData.getData("text").trim();
@@ -138,7 +143,7 @@ const VerifyForgotPasswordOtp = () => {
                           }, 0);
                         }
                       }
-                    }}*/
+                    }}
                     maxLength={1}
                     className="w-12 h-12 p-2 border rounded text-center font-semibold"
                   />
@@ -169,7 +174,7 @@ const VerifyForgotPasswordOtp = () => {
             to={"/login"}
             className="font-semibold text-green-600 hover:text-green-800"
           >
-            login
+            Login
           </Link>
         </p>
       </div>
