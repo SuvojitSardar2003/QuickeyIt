@@ -5,12 +5,22 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import useMobile from "../hooks/useMobile";
 import { BsCart4 } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
   const navigate = useNavigate();
   const redirectToLoginPage = () => {
     navigate("/login");
   };
+  const user = useSelector((state) => state?.user);
+  const [oprnUserMenu, setOpenUserMenu] = useState(false);
+  const handleCloseUserMenu = () => {
+    setOpenUserMenu(false);
+  };
+
+  console.log("User from store", user);
 
   const [isMobile] = useMobile();
   console.log("isMobile", isMobile);
@@ -64,9 +74,32 @@ const Header = () => {
 
             {/*For Desktop Version */}
             <div className="hidden lg:flex items-center gap-10 justify-center ">
-              <button onClick={redirectToLoginPage} className="text-lg px-2">
-                Login
-              </button>
+              {user?._id ? (
+                <div className="relative">
+                  <div
+                    onClick={() => setOpenUserMenu((preve) => !preve)}
+                    className="flex items-center gap-1 cursor-pointer select-none"
+                  >
+                    <p>Account </p>
+                    {oprnUserMenu ? (
+                      <GoTriangleUp size={25} />
+                    ) : (
+                      <GoTriangleDown size={25} />
+                    )}
+                  </div>
+                  {oprnUserMenu && (
+                    <div className="absolute right-0 top-12">
+                      <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
+                        <UserMenu close={handleCloseUserMenu}/>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button onClick={redirectToLoginPage} className="text-lg px-2">
+                  Login
+                </button>
+              )}
 
               {/*h-14 w-28*/}
               <button className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-1">

@@ -52,6 +52,11 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (data.newPassword !== data.confirmPassword) {
+      toast.error("Password and Confirm Password must be Same");
+      return;
+    }
+
     try {
       const response = await Axios({
         ...SummaryApi.resetPassword,
