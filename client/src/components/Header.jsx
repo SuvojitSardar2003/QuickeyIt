@@ -15,15 +15,15 @@ const Header = () => {
     navigate("/login");
   };
   const user = useSelector((state) => state?.user);
-  const [oprnUserMenu, setOpenUserMenu] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
   const handleCloseUserMenu = () => {
     setOpenUserMenu(false);
   };
 
-  console.log("User from store", user);
+  //console.log("User from store", user);
 
   const [isMobile] = useMobile();
-  console.log("isMobile", isMobile);
+  //console.log("isMobile", isMobile);
 
   const location = useLocation();
   //console.log("location", location);
@@ -34,7 +34,11 @@ const Header = () => {
     setIsSearchPage(isSearch);
   }, [location]);
 
-  console.log("search", isSearchPage);
+  const handleMobileLoginUser = () => {
+    navigate("/user");
+  };
+
+  //console.log("search", isSearchPage);
 
   return (
     <>
@@ -68,9 +72,15 @@ const Header = () => {
           {/*login and my cart*/}
           <div>
             {/*User Icon only in Mobile Version */}
-            <button className="text-neutral-800 lg:hidden">
-              <FaRegUserCircle size={30} onClick={redirectToLoginPage} />
-            </button>
+            {user?._id ? (
+              <button className="text-neutral-800 lg:hidden">
+                <FaRegUserCircle size={30} onClick={handleMobileLoginUser} />
+              </button>
+            ) : (
+              <button className="text-neutral-800 lg:hidden">
+                <FaRegUserCircle size={30} onClick={redirectToLoginPage} />
+              </button>
+            )}
 
             {/*For Desktop Version */}
             <div className="hidden lg:flex items-center gap-10 justify-center ">
@@ -81,16 +91,16 @@ const Header = () => {
                     className="flex items-center gap-1 cursor-pointer select-none"
                   >
                     <p>Account </p>
-                    {oprnUserMenu ? (
+                    {openUserMenu ? (
                       <GoTriangleUp size={25} />
                     ) : (
                       <GoTriangleDown size={25} />
                     )}
                   </div>
-                  {oprnUserMenu && (
+                  {openUserMenu && (
                     <div className="absolute right-0 top-12">
                       <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
-                        <UserMenu close={handleCloseUserMenu}/>
+                        <UserMenu close={handleCloseUserMenu} />
                       </div>
                     </div>
                   )}
