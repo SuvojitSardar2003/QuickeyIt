@@ -56,7 +56,7 @@ const Register = () => {
           password: "",
           confirmPassword: "",
         });
-        navigate("/");
+        navigate("/login");
       }
       console.log(response);
     } catch (error) {
