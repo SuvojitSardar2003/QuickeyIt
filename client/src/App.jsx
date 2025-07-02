@@ -12,8 +12,8 @@ function App() {
   const dispatch = useDispatch();
 
   const fetchUser = async () => {
-    const userData = await fetchUserDetails();
     //console.log("User Data", userData.data);
+    const userData = await fetchUserDetails();
     dispatch(setUserDetails(userData.data));
   };
   useEffect(() => {
