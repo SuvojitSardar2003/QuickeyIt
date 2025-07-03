@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import uploadImage from "../utils/UploadImage";
 
 const UploadCategoryModel = ({ close }) => {
   const [data, setData] = useState({
@@ -22,11 +23,14 @@ const UploadCategoryModel = ({ close }) => {
     e.preventDefault();
   };
 
-  const handleUploadCategoryImage = (e) => {
+  const handleUploadCategoryImage = async (e) => {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
+
+    const uploadImage = await uploadImage(file);
+    console.log(uploadImage);
   };
 
   return (
@@ -66,7 +70,6 @@ const UploadCategoryModel = ({ close }) => {
               </div>
               <label htmlFor="uploadCategoryImage">
                 <div
-                  disabled={!data.name}
                   className={`
                 ${!data.name ? "bg-gray-400" : "bg-amber-300"}
                 px-4 py-2 rounded cursor-pointer
@@ -79,6 +82,7 @@ const UploadCategoryModel = ({ close }) => {
                   id="uploadCategoryImage"
                   className="hidden"
                   onChange={handleUploadCategoryImage}
+                  disabled={!data.name}
                 />
               </label>
             </div>
