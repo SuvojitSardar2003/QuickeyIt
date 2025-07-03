@@ -52,10 +52,42 @@ const UserMenu = ({ close }) => {
             <HiOutlineExternalLink size={15} />
           </Link>
         </div>
-        
+
         <Divider />
 
         <div className="text-sm grid gap-1 ">
+          <Link
+            to={"/dashboard/category"}
+            onClick={close}
+            className="px-2 lg:hover:bg-slate-100 py-1"
+          >
+            Category
+          </Link>
+
+          <Link
+            to={"/dashboard/subcategory"}
+            onClick={close}
+            className="px-2 lg:hover:bg-slate-100 py-1"
+          >
+            Sub Category
+          </Link>
+
+          <Link
+            to={"/dashboard/upload-product"}
+            onClick={close}
+            className="px-2 lg:hover:bg-slate-100 py-1"
+          >
+            Upload Product
+          </Link>
+
+          <Link
+            to={"/dashboard/product"}
+            onClick={close}
+            className="px-2 lg:hover:bg-slate-100 py-1"
+          >
+            Product
+          </Link>
+
           <Link
             to={"/dashboard/myorders"}
             onClick={close}
