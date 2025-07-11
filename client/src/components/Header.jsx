@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="h-28 lg:h-20 lg:shadow-md sticky top-0 bg-white">
+      <header className="h-28 lg:h-20 lg:shadow-md sticky top-0 z-40 bg-white">
         <div className="container mx-auto flex items-center lg:h-20 h-15 px-2 justify-between">
           {/*logo*/}
           <div className="lg:h-full">
