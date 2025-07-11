@@ -5,11 +5,13 @@ import Loading from "../components/Loading";
 import NoData from "../components/NoData";
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../utils/Axios";
+import EditCategory from "../components/EditCategory";
 
 const CategoryPage = () => {
   const [openUploadCategoty, setOpenUploadCategory] = useState(false);
   const [loading, setLoading] = useState(false);
   const [categoryData, setCategotyData] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const fetchCategory = async () => {
     try {
@@ -49,12 +51,26 @@ const CategoryPage = () => {
       <div className="p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
         {categoryData.map((category, index) => {
           return (
-            <div className="w-32 h-48 overflow-hidden rounded shadow-md">
+            //h-48 hover:h-56
+            <div className="w-32 h-56 overflow-hidden rounded shadow-md">
               <img
                 src={category.image}
                 alt={category.name}
                 className="w-full object-scale-down"
               />
+              <div className="items-center h-9 flex gap-2">
+                <button
+                  className="flex-1 bg-green-100 hover:bg-green-200 text-green-600 font-medium py-1 rounded"
+                  onClick={() => {
+                    setOpenEdit(true);
+                  }}
+                >
+                  Edit
+                </button>
+                <button className="flex-1 bg-red-100 hover:bg-red-200 text-red-600 font-medium py-1 rounded">
+                  Delete
+                </button>
+              </div>
             </div>
           );
         })}
@@ -63,8 +79,13 @@ const CategoryPage = () => {
       {loading && <Loading />}
 
       {openUploadCategoty && (
-        <UploadCategoryModel fetchDate={fetchCategory} close={() => setOpenUploadCategory(false)} />
+        <UploadCategoryModel
+          fetchDate={fetchCategory}
+          close={() => setOpenUploadCategory(false)}
+        />
       )}
+
+      {openEdit && <EditCategory close={() => setOpenEdit(false)} />}
     </section>
   );
 };
