@@ -46,14 +46,14 @@ const CategoryPage = () => {
 
       {!categoryData[0] && !loading && <NoData />}
 
-      <div className="p-4">
+      <div className="p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
         {categoryData.map((category, index) => {
           return (
-            <div className="w-40 h-56 overflow-hidden bg-red-500 rounded shadow-md">
+            <div className="w-32 h-48 overflow-hidden rounded shadow-md">
               <img
                 src={category.image}
                 alt={category.name}
-                className="w-52 object-scale-down"
+                className="w-full object-scale-down"
               />
             </div>
           );
@@ -63,7 +63,7 @@ const CategoryPage = () => {
       {loading && <Loading />}
 
       {openUploadCategoty && (
-        <UploadCategoryModel close={() => setOpenUploadCategory(false)} />
+        <UploadCategoryModel fetchDate={fetchCategory} close={() => setOpenUploadCategory(false)} />
       )}
     </section>
   );
