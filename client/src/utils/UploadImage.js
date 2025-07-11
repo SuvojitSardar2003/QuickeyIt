@@ -7,9 +7,9 @@ const uploadImage = async (image)=>{
         formData.append('image',image)
 
         const response = await Axios({
-            ...SummaryApi.uploadImage({
+            ...SummaryApi.uploadImage,
                 data : formData
-            })
+            
         })
 
         return response

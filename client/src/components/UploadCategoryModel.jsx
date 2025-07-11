@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import uploadImage from "../utils/UploadImage";
+import Axios from "../utils/Axios";
+import SummaryApi from "../common/SummaryApi";
+import toast from "react-hot-toast";
+import AxiosToastError from "../utils/AxiosToastError";
 
 const UploadCategoryModel = ({ close }) => {
   const [data, setData] = useState({
     name: "",
     image: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -19,8 +25,25 @@ const UploadCategoryModel = ({ close }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await Axios({
+        ...SummaryApi.addCategory,
+        data: data,
+      });
+
+      const { data: responseData } = response;
+      if (responseData.success) {
+        toast.success(responseData.message);
+        close();
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUploadCategoryImage = async (e) => {
@@ -29,8 +52,16 @@ const UploadCategoryModel = ({ close }) => {
       return;
     }
 
-    const uploadImage = await uploadImage(file);
-    console.log(uploadImage);
+    const response = await uploadImage(file);
+    const { data: ImageResponse } = response;
+
+    setData((preve) => {
+      return {
+        ...preve,
+        image: ImageResponse.data.url,
+      };
+    });
+    //console.log(Image);
   };
 
   return (
@@ -66,12 +97,24 @@ const UploadCategoryModel = ({ close }) => {
             <p>Image</p>
             <div className="flex gap-4 flex-col lg:flex-row items-center">
               <div className="border bg-blue-50 h-36 w-full lg:w-36 flex items-center justify-center rounded">
-                <p className="text-sm text-neutral-500">No Image</p>
+                {data.image ? (
+                  <img
+                    alt="category"
+                    src={data.image}
+                    className="w-full h-full object-scale-down"
+                  />
+                ) : (
+                  <p className="text-sm text-neutral-500">No Image</p>
+                )}
               </div>
               <label htmlFor="uploadCategoryImage">
                 <div
                   className={`
-                ${!data.name ? "bg-gray-400" : "bg-amber-300"}
+                ${
+                  !data.name
+                    ? "bg-gray-300"
+                    : "border-amber-300 hover:bg-amber-300 hover:font-semibold"
+                }  border font-medium 
                 px-4 py-2 rounded cursor-pointer
                 `}
                 >
@@ -87,6 +130,19 @@ const UploadCategoryModel = ({ close }) => {
               </label>
             </div>
           </div>
+
+          <button
+            className={`
+              ${
+                data.name && data.image
+                  ? "bg-amber-400 cursor-pointer hover:bg-amber-300"
+                  : "bg-gray-300"
+              }
+              py-2 font-semibold rounded
+              `}
+          >
+            Add Category
+          </button>
         </form>
       </div>
     </section>

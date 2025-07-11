@@ -53,10 +53,15 @@ const SummaryApi={
         url: "api/category/add-category",
         method: "post"
     },
-    uploadCategoryImage:
+    uploadImage:
     {
         url: "/api/file/upload",
         method: "post"
+    },
+    getCategory:
+    {
+        url: "api/category/get",
+        method: "get"
     }
 }
 
