@@ -53,6 +53,7 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
       return;
     }
 
+    setLoading(true)
     const response = await uploadImage(file);
     const { data: ImageResponse } = response;
 
@@ -62,6 +63,7 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
         image: ImageResponse.data.url,
       };
     });
+    setLoading(false)
     //console.log(Image);
   };
 
@@ -119,7 +121,8 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
                 px-4 py-2 rounded cursor-pointer
                 `}
                 >
-                  Upload Image
+                  {loading?"Loading":"Upload Image"}
+                  
                 </div>
                 <input
                   type="file"
