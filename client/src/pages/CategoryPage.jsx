@@ -6,12 +6,17 @@ import NoData from "../components/NoData";
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../utils/Axios";
 import EditCategory from "../components/EditCategory";
+import { use } from "react";
 
 const CategoryPage = () => {
   const [openUploadCategoty, setOpenUploadCategory] = useState(false);
   const [loading, setLoading] = useState(false);
   const [categoryData, setCategotyData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState({
+    name: "",
+    image: "",
+  });
 
   const fetchCategory = async () => {
     try {
@@ -63,6 +68,7 @@ const CategoryPage = () => {
                   className="flex-1 bg-green-100 hover:bg-green-200 text-green-600 font-medium py-1 rounded"
                   onClick={() => {
                     setOpenEdit(true);
+                    setEditData(category);
                   }}
                 >
                   Edit
@@ -85,7 +91,13 @@ const CategoryPage = () => {
         />
       )}
 
-      {openEdit && <EditCategory close={() => setOpenEdit(false)} />}
+      {openEdit && (
+        <EditCategory
+          data={editData}
+          close={() => setOpenEdit(false)}
+          fetchDate={fetchCategory}
+        />
+      )}
     </section>
   );
 };
