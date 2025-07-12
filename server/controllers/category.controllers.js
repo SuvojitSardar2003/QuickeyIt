@@ -64,10 +64,10 @@ export const getCategoryController =async(request,response)=>{
 
 export const updateCategoryController =async(request,response)=>{
     try {
-        const { categoryId, name, image } = request.body
+        const { _id, name, image } = request.body
 
         const update = await CategoryModel.updateOne({
-            _id : categoryId
+            _id : _id
         },{
             name,
             image
