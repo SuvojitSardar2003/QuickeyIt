@@ -3,7 +3,7 @@ import React from "react";
 
 const ConfirmLogout = ({ onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0   bg-opacity-30 flex justify-center items-center z-50">
+    <section className="fixed top-0 bottom-0 left-0 right-0 p-4  bg-neutral-900/30 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-xl shadow-lg text-center w-80">
         <p className="text-lg font-semibold mb-4">Do you want to log out?</p>
         <div className="flex justify-center gap-4">
@@ -21,7 +21,7 @@ const ConfirmLogout = ({ onConfirm, onCancel }) => {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
