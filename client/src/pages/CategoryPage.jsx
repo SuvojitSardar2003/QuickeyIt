@@ -67,7 +67,8 @@ const CategoryPage = () => {
 
   return (
     <section>
-      <div className="p-2 bg-white shadow-md flex items-center justify-between">
+      {/*sticky top-20 z-10*/}
+      <div className="sticky top-20 z-10 p-2 bg-white shadow-md flex items-center justify-between">
         <h2 className="font-semibold">Category</h2>
         <button
           onClick={() => setOpenUploadCategory((preve) => !preve)}

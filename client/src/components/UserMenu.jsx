@@ -120,7 +120,10 @@ const UserMenu = ({ close }) => {
             setShowConfirmLogout(false);
             handleLogout();
           }}
-          onCancel={() => setShowConfirmLogout(false)}
+          onCancel={() => {
+            setShowConfirmLogout(false);
+            if (close) close();
+          }}
         />
       )}
     </>
