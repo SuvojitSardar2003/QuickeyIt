@@ -7,6 +7,16 @@ import router from "./route/index.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 
+
+// Create the portal root if it doesn't exist
+const portalRootId = "portal-root";
+let portalRoot = document.getElementById(portalRootId);
+if (!portalRoot) {
+  portalRoot = document.createElement("div");
+  portalRoot.id = portalRootId;
+  document.body.appendChild(portalRoot);
+}
+
 createRoot(document.getElementById("root")).render(
   //<StrictMode>
   <Provider store={store}>
