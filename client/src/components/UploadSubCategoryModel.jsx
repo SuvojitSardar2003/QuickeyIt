@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import uploadImage from "../utils/UploadImage";
-import Axios from "../utils/Axios";
-import SummaryApi from "../common/SummaryApi";
-import toast from "react-hot-toast";
-import AxiosToastError from "../utils/AxiosToastError";
 
-const UploadCategoryModel = ({ close, fetchDate }) => {
-  const [data, setData] = useState({
+const UploadSubCategoryModel = ({ close }) => {
+  const [subCategoryData, setSubCategoryData] = useState({
     name: "",
     image: "",
+    category: [],
   });
 
   const [loading, setLoading] = useState(false);
@@ -17,7 +14,7 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
-    setData((preve) => {
+    setSubCategoryData((preve) => {
       return {
         ...preve,
         [name]: value,
@@ -25,53 +22,30 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const response = await Axios({
-        ...SummaryApi.addCategory,
-        data: data,
-      });
-
-      const { data: responseData } = response;
-      if (responseData.success) {
-        toast.success(responseData.message);
-        close();
-        fetchDate();
-      }
-    } catch (error) {
-      AxiosToastError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUploadCategoryImage = async (e) => {
+  const handleUploadSubCategoryImage = async (e) => {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     const response = await uploadImage(file);
     const { data: ImageResponse } = response;
 
-    setData((preve) => {
+    setSubCategoryData((preve) => {
       return {
         ...preve,
         image: ImageResponse.data.url,
       };
     });
-    setLoading(false)
+    setLoading(false);
     //console.log(Image);
   };
-
   return (
-    <section className="fixed top-0 bottom-0 left-0 right-0 bg-neutral-900/30 z-50 p-4 flex  items-center justify-center">
+    <section className="fixed inset-0 bg-neutral-900/30 z-50 p-4 flex  items-center justify-center">
       <div className="bg-white max-w-4xl w-full p-4 rounded">
         <div className="flex items-center justify-between">
-          <h1 className="font-semibold">Category</h1>
+          <h1 className="font-semibold">Add Sub Category</h1>
           <button
             onClick={close}
             className="text-neutral-900 block w-fit ml-auto"
@@ -80,77 +54,82 @@ const UploadCategoryModel = ({ close, fetchDate }) => {
           </button>
         </div>
 
-        <form action="" className="my-3 grid gap-4" onSubmit={handleSubmit}>
+        <form action="" className="my-3 grid gap-4">
+          {/*Name*/}
           <div className="grid gap-1">
-            <label htmlFor="categoryName" id="categoryName">
+            <label htmlFor="subCategoryName" id="subCategoryName">
               Name
             </label>
             <input
               type="text"
               name="name"
-              id="categoryName"
-              placeholder="Enter Categoty Name"
-              value={data.name}
-              onChange={handleOnChange}
+              id="subCategoryName"
+              placeholder="Enter Sub Category Name"
               className="bg-blue-50 p-2 border border-blue-100 focus-within:border-amber-300 outline-none rounded"
+              value={subCategoryData.name}
+              onChange={handleOnChange}
             />
           </div>
 
+          {/*Iamge*/}
           <div className="grid gap-1">
             <p>Image</p>
             <div className="flex gap-4 flex-col lg:flex-row items-center">
               <div className="border bg-blue-50 h-36 w-full lg:w-36 flex items-center justify-center rounded">
-                {data.image ? (
+                {subCategoryData.image ? (
                   <img
                     alt="category"
-                    src={data.image}
+                    src={subCategoryData.image}
                     className="w-full h-full object-scale-down"
                   />
                 ) : (
                   <p className="text-sm text-neutral-500">No Image</p>
                 )}
               </div>
-              <label htmlFor="uploadCategoryImage">
+
+              <label htmlFor="uploadSubCategoryImage">
                 <div
                   className={`
                 ${
-                  !data.name
+                  !subCategoryData.name
                     ? "bg-gray-300"
                     : "border-amber-300 hover:bg-amber-300 hover:font-semibold"
                 }  border font-medium 
                 px-4 py-2 rounded cursor-pointer
                 `}
                 >
-                  {loading?"Loading":"Upload Image"}
-                  
+                  {loading ? "Loading" : "Upload Image"}
                 </div>
                 <input
                   type="file"
-                  id="uploadCategoryImage"
+                  id="uploadSubCategoryImage"
                   className="hidden"
-                  onChange={handleUploadCategoryImage}
-                  disabled={!data.name}
+                  onChange={handleUploadSubCategoryImage}
+                  disabled={!subCategoryData.name}
                 />
               </label>
             </div>
           </div>
 
-          <button
-            className={`
-              ${
-                data.name && data.image
-                  ? "bg-amber-400 cursor-pointer hover:bg-amber-300"
-                  : "bg-gray-300"
-              }
-              py-2 font-semibold rounded
-              `}
-          >
-            Add Category
-          </button>
+          {/*Category*/}
+          <div className="grid gap-1">
+            <label htmlFor="">Select Category</label>
+
+            <div className="border focus-within:border-amber-300 rounded">
+              {/*display value*/}
+
+              {/*select category*/}
+              <select name="" id="" className="w-full p-2 bg-transparent  outline-none">
+                <option value="" disabled>
+                  Select Category
+                </option>
+              </select>
+            </div>
+          </div>
         </form>
-        </div>
+      </div>
     </section>
   );
 };
 
-export default UploadCategoryModel;
+export default UploadSubCategoryModel;
