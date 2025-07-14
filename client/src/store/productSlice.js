@@ -1,4 +1,4 @@
-import { createSlice } from "@redux.js/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialValue = {
     allCategory : [],
@@ -11,6 +11,7 @@ const productSlice = createSlice({
     initialState : initialValue,
     reducer : {
         setAllCategory : (state,action)=>{
+            console.log("all category redux store",action.payload)
             state.allCategory = [...action.payload]
         }
     }
