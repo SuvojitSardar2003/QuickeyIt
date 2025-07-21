@@ -10,8 +10,11 @@ import { use } from "react";
 import ConfirmBox from "../components/ConfirmBox";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
+import { useDispatch, useSelector } from "react-redux";
+import { setAllCategory } from "../store/productSlice";
 
 const CategoryPage = () => {
+  const dispatch = useDispatch();
   const [openUploadCategoty, setOpenUploadCategory] = useState(false);
   const [loading, setLoading] = useState(false);
   const [categoryData, setCategotyData] = useState([]);
@@ -25,6 +28,12 @@ const CategoryPage = () => {
     _id: "",
   });
 
+  const allCategory = useSelector((state) => state.product.allCategory);
+  //console.log("all category redux", allCategory);
+  useEffect(() => {
+    setCategotyData(allCategory);
+  }, [allCategory]);
+
   const fetchCategory = async () => {
     try {
       setLoading(true);
@@ -34,6 +43,7 @@ const CategoryPage = () => {
       const { data: responseData } = response;
       if (responseData.success) {
         setCategotyData(responseData.data);
+        dispatch(setAllCategory(responseData.data));
       }
       //console.log(responseData);
     } catch (error) {
