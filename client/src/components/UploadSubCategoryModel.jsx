@@ -8,6 +8,10 @@ import SummaryApi from "../common/SummaryApi";
 import AxiosToastError from "../utils/AxiosToastError";
 import toast from "react-hot-toast";
 
+/* import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setAllCategory } from "../store/productSlice"; */
+
 const UploadSubCategoryModel = ({ close }) => {
   const [subCategoryData, setSubCategoryData] = useState({
     name: "",
@@ -86,6 +90,29 @@ const UploadSubCategoryModel = ({ close }) => {
   };
 
   //console.log("subCategoryDate", subCategoryData);
+
+  /* const dispatch = useDispatch();
+  const allCategory = useSelector((state) => state.product.allCategory); */
+
+  /*  useEffect(() => {
+    const fetchAllCategory = async () => {
+      try {
+        const response = await Axios({ ...SummaryApi.getCategory });
+        const { data: responseData } = response;
+
+        if (responseData.success) {
+          dispatch(setAllCategory(responseData.data));
+        }
+      } catch (error) {
+        AxiosToastError(error);
+      }
+    };
+
+    // Only fetch if empty
+    if (!allCategory || allCategory.length === 0) {
+      fetchAllCategory();
+    }
+  }, [allCategory, dispatch]); */
 
   return (
     <section className="fixed inset-0 bg-neutral-900/30 z-50 p-4 flex  items-center justify-center">
@@ -194,7 +221,7 @@ const UploadSubCategoryModel = ({ close }) => {
                 className="w-full p-2 bg-transparent  outline-none border"
                 onChange={(e) => {
                   const value = e.target.value;
-                  setSelectedCategoryId("");
+                  setSelectedCategoryId(value);
                   const categoryDetails = allCategory.find(
                     (el) => el._id === value
                   );
@@ -209,9 +236,12 @@ const UploadSubCategoryModel = ({ close }) => {
                       ...subCategoryData,
                       category: [...subCategoryData.category, categoryDetails],
                     };
-                    console.log("Updated subCategoryData:", updatedData); // ✅ Logs after category selection
+                    //console.log("Updated subCategoryData:", updatedData); // ✅ Logs after category selection
                     setSubCategoryData(updatedData);
                   }
+
+                  // Reset dropdown
+                  setSelectedCategoryId("");
                 }}
               >
                 <option value="">Select Category</option>
