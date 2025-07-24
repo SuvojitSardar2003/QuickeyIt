@@ -12,8 +12,8 @@ import EditSubCategory from "../components/EditSubCategory";
 import ConfirmBox from "../components/ConfirmBox";
 import toast from "react-hot-toast";
 
-/* import { useDispatch, useSelector } from "react-redux";
-import { setAllCategory } from "./store/productSlice";  */ // or your slice
+import { useDispatch, useSelector } from "react-redux";
+import { setAllCategory } from "../store/productSlice"; // or your slice
 
 const SubCategoryPage = () => {
   const [openAddSubCategory, setOpenAddSubCategoty] = useState(false);
@@ -29,6 +29,9 @@ const SubCategoryPage = () => {
   const [deleteSubCategory, setDeleteSubCategory] = useState({
     _id: "",
   });
+
+  const dispatch = useDispatch();
+  const allCategory = useSelector((state) => state.product.allCategory);
 
   const fetchSubCategory = async () => {
     try {
@@ -50,6 +53,9 @@ const SubCategoryPage = () => {
 
   useEffect(() => {
     fetchSubCategory();
+    if (!allCategory.length) {
+      fetchAllCategory();
+    }
   }, []);
 
   const column = [
@@ -137,6 +143,20 @@ const SubCategoryPage = () => {
         fetchSubCategory();
         setOpenConfirmBoxDelete(false);
         setDeleteSubCategory({ _id: "" });
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
+  };
+
+  const fetchAllCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getCategory,
+      });
+      const { data: responseData } = response;
+      if (responseData.success) {
+        dispatch(setAllCategory(responseData.data));
       }
     } catch (error) {
       AxiosToastError(error);
