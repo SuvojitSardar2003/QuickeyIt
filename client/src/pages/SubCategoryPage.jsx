@@ -5,12 +5,14 @@ import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
 import DiaplayTable from "../components/DiaplayTable";
 import { createColumnHelper } from "@tanstack/react-table";
+import ViewImage from "../components/ViewImage";
 
 const SubCategoryPage = () => {
   const [openAddSubCategory, setOpenAddSubCategoty] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const columnHelper = createColumnHelper();
+  const [imageURL, setImageURL] = useState();
 
   const fetchSubCategory = async () => {
     try {
@@ -48,7 +50,10 @@ const SubCategoryPage = () => {
               src={row.original.image}
               alt={row.original.name}
               //w-12 h-20
-              className="w-10 h-14"
+              className="w-10 h-14 cursor-pointer"
+              onClick={() => {
+                setImageURL(row.original.image);
+              }}
             />
           </div>
         );
@@ -79,6 +84,8 @@ const SubCategoryPage = () => {
       {openAddSubCategory && (
         <UploadSubCategoryModel close={() => setOpenAddSubCategoty(false)} />
       )}
+
+      {imageURL && <ViewImage url={imageURL} close={() => setImageURL("")} />}
     </section>
   );
 };
