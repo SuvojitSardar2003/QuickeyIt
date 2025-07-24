@@ -63,7 +63,7 @@ const UploadSubCategoryModel = ({ close }) => {
     });
   };
 
-  const handleSubmitSubCategory = async (e)=>{
+  const handleSubmitSubCategory = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -76,14 +76,14 @@ const UploadSubCategoryModel = ({ close }) => {
       if (responseData.success) {
         toast.success(responseData.message);
         close();
-        fetchDate();
+        //fetchDate();
       }
     } catch (error) {
       AxiosToastError(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   //console.log("subCategoryDate", subCategoryData);
 
@@ -170,18 +170,18 @@ const UploadSubCategoryModel = ({ close }) => {
               <div className="flex flex-wrap gap-2">
                 {subCategoryData.category.map((cat, index) => {
                   return (
-                    <p
+                    <div
                       key={cat._id + "selectedValue"}
                       className="bg-white shadow-md px-1 m-1 flex gap-2 items-center"
                     >
-                      {cat.name}
+                      <span>{cat.name}</span>
                       <div
                         className="cursor-pointer hover:text-red-600"
                         onClick={() => handleRemoveCategorySelected(cat._id)}
                       >
                         <IoIosClose size={20} />
                       </div>
-                    </p>
+                    </div>
                   );
                 })}
               </div>
@@ -204,19 +204,17 @@ const UploadSubCategoryModel = ({ close }) => {
                     (el) => el._id === categoryDetails._id
                   );
 
-                  if (!alreadyAdded) {
-                    setSubCategoryData((preve) => {
-                      return {
-                        ...preve,
-                        category: [...preve.category, categoryDetails],
-                      };
-                    });
+                  if (!alreadyAdded && categoryDetails) {
+                    const updatedData = {
+                      ...subCategoryData,
+                      category: [...subCategoryData.category, categoryDetails],
+                    };
+                    console.log("Updated subCategoryData:", updatedData); // ✅ Logs after category selection
+                    setSubCategoryData(updatedData);
                   }
                 }}
               >
-                <option value="" disabled>
-                  Select Category
-                </option>
+                <option value="">Select Category</option>
                 {allCategory.map((category, index) => {
                   return (
                     <option
