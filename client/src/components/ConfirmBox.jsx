@@ -19,13 +19,13 @@ const ConfirmBox = ({ cancel, confirm, close }) => {
         <div className="flex justify-between items-center ">
           <button
             onClick={cancel}
-            className="px-4 py-1 border rounded border-green-500 text-green-500 hover:bg-green-600 hover:text-white"
+            className="px-4 py-1 border rounded border-red-500 text-red-500 hover:bg-red-600 hover:text-white"
           >
             Cancel
           </button>
           <button
             onClick={confirm}
-            className="px-4 py-1 border rounded border-red-500 text-red-500 hover:bg-red-600 hover:text-white"
+            className="px-4 py-1 border rounded border-green-500 text-green-500 hover:bg-green-600 hover:text-white"
           >
             Confirm
           </button>
