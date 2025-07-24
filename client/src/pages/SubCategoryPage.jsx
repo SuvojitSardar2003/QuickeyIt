@@ -6,6 +6,13 @@ import SummaryApi from "../common/SummaryApi";
 import DiaplayTable from "../components/DiaplayTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import ViewImage from "../components/ViewImage";
+import { HiPencil } from "react-icons/hi2";
+import { MdDelete } from "react-icons/md";
+import EditSubCategory from "../components/EditSubCategory";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setAllCategory } from "./store/productSlice"; // or your slice
+
 
 const SubCategoryPage = () => {
   const [openAddSubCategory, setOpenAddSubCategoty] = useState(false);
@@ -13,6 +20,10 @@ const SubCategoryPage = () => {
   const [loading, setLoading] = useState(false);
   const columnHelper = createColumnHelper();
   const [imageURL, setImageURL] = useState();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState({
+    _id: "",
+  });
 
   const fetchSubCategory = async () => {
     try {
@@ -61,6 +72,43 @@ const SubCategoryPage = () => {
     }),
     columnHelper.accessor("category", {
       header: "Category",
+      cell: ({ row }) => {
+        return (
+          <>
+            {row.original.category.map((c, index) => {
+              return (
+                <p
+                  key={c._id + "table"}
+                  className="shadow-md px-1 inline-block "
+                >
+                  {c.name}
+                </p>
+              );
+            })}
+          </>
+        );
+      },
+    }),
+    columnHelper.accessor("_id", {
+      header: "Action",
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-between items-center">
+            <button
+              onClick={() => {
+                setOpenEdit(true);
+                setEditData(row.original);
+              }}
+              className="p-2 bg-green-100 rounded-full  hover:text-green-600"
+            >
+              <HiPencil size={20} />
+            </button>
+            <button className="p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600">
+              <MdDelete size={20} />
+            </button>
+          </div>
+        );
+      },
     }),
   ];
 
@@ -78,7 +126,7 @@ const SubCategoryPage = () => {
       </div>
 
       <div>
-        <DiaplayTable data={data} column={column} />
+        <DiaplayTable data={[...data].reverse()} column={column} />
       </div>
 
       {openAddSubCategory && (
@@ -86,6 +134,14 @@ const SubCategoryPage = () => {
       )}
 
       {imageURL && <ViewImage url={imageURL} close={() => setImageURL("")} />}
+
+      {openEdit && (
+        <EditSubCategory
+          data={editData}
+          close={() => setOpenEdit(false)}
+          refreshData={fetchSubCategory}
+        />
+      )}
     </section>
   );
 };
