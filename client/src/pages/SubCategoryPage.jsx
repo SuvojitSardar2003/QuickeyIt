@@ -176,7 +176,7 @@ const SubCategoryPage = () => {
         </button>
       </div>
 
-      <div>
+      <div className="overflow-auto w-full max-w-[95vw]">
         <DiaplayTable data={[...data].reverse()} column={column} />
       </div>
 
