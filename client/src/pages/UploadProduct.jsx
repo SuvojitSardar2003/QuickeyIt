@@ -13,6 +13,7 @@ import { setAllCategory, setAllSubCategory } from "../store/productSlice";
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../utils/Axios";
 import AddFieldComponent from "../components/AddFieldComponent";
+import successAlert from "../utils/SuccessAlert";
 
 const UploadProduct = () => {
   const [data, setData] = useState({
@@ -21,9 +22,9 @@ const UploadProduct = () => {
     category: [],
     subCategory: [],
     unit: "",
-    stock: 0,
-    price: 0,
-    discount: 0,
+    stock: "",
+    price: "",
+    discount: "",
     description: "",
     more_details: {},
   });
@@ -154,6 +155,25 @@ const UploadProduct = () => {
   const [openAddField, setOpenAddField] = useState(false);
   const [fieldName, setFieldName] = useState("");
 
+  const resetForm = () => {
+    setData({
+      name: "",
+      image: [],
+      category: [],
+      subCategory: [],
+      unit: "",
+      stock: "",
+      price: "",
+      discount: "",
+      description: "",
+      more_details: {},
+    });
+    setSelectedCategoryId("");
+    setSelectedSubCategoryId("");
+    setViewImageURL("");
+    setDeleteImageIndex(null);
+  };
+
   const handleAddField = () => {
     setData((preve) => {
       return {
@@ -168,9 +188,24 @@ const UploadProduct = () => {
     setOpenAddField(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("data", data);
+
+    try {
+      const response = await Axios({
+        ...SummaryApi.createProduct,
+        data: data,
+      });
+
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        successAlert(responseData.message);
+      }
+      resetForm();
+    } catch (error) {
+      AxiosToastError(error);
+    }
   };
 
   return (

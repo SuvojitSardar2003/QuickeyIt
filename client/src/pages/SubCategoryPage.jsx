@@ -181,7 +181,10 @@ const SubCategoryPage = () => {
       </div>
 
       {openAddSubCategory && (
-        <UploadSubCategoryModel close={() => setOpenAddSubCategoty(false)} />
+        <UploadSubCategoryModel
+          close={() => setOpenAddSubCategoty(false)}
+          fetchDate={fetchSubCategory}
+        />
       )}
 
       {imageURL && <ViewImage url={imageURL} close={() => setImageURL("")} />}
