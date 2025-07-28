@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setAllCategory } from "../store/productSlice"; */
 
-const UploadSubCategoryModel = ({ close }) => {
+const UploadSubCategoryModel = ({ close, fetchDate }) => {
   const [subCategoryData, setSubCategoryData] = useState({
     name: "",
     image: "",
@@ -81,6 +81,9 @@ const UploadSubCategoryModel = ({ close }) => {
         toast.success(responseData.message);
         close();
         //fetchDate();
+      }
+      if (fetchDate) {
+        fetchDate();
       }
     } catch (error) {
       AxiosToastError(error);
