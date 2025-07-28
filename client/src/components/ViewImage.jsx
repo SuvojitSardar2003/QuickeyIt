@@ -8,7 +8,7 @@ const ViewImage = ({ url, close }) => {
       <div className="w-full max-w-md max-h-[80vh] p-4 bg-white">
         <button
           onClick={close}
-          className="text-neutral-900 block w-fit ml-auto"
+          className="text-neutral-900 block w-fit ml-auto cursor-pointer"
         >
           <IoClose size={25} />
         </button>
