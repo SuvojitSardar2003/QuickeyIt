@@ -48,7 +48,7 @@ export const getProductController = async (request,response) =>{
         let { page, limit, search } = request.body;
 
        page = page || 2;
-       limit = limit || 10;
+       limit = limit || 12;
 
         const query = search ? {
             $text : {
