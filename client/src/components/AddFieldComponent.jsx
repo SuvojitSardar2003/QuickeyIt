@@ -22,7 +22,12 @@ const AddFieldComponent = ({ close, value, onChange, submit }) => {
           onChange={onChange}
         />
         <button
-          className="cursor-pointer rounded-xl border text-sm border-amber-300 hover:bg-amber-300 hover:text-neutral-900 px-4 py-2 mx-auto wi-fit block text-center font-semibold"
+          disabled={!value.trim()}
+          className={`cursor-pointer rounded-xl border text-sm px-4 py-2 mx-auto wi-fit block text-center font-semibold ${
+            value.trim()
+              ? "border-amber-300 hover:bg-amber-300 hover:text-neutral-900 "
+              : "border-gray-300 bg-gray-200 text-gray-400 cursor-not-allowed"
+          }  `}
           onClick={submit}
         >
           Add Field
