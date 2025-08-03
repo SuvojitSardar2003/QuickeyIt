@@ -1,11 +1,127 @@
-import React from 'react'
+import React, { useState } from "react";
+import SummeryApi from "../common/SummaryApi";
+import AxiosToastError from "../utils/AxiosToastError";
+import Axios from "../utils/Axios";
+import { useEffect } from "react";
+import Loading from "../components/Loading";
+import ProductCardAdmin from "../components/ProductCardAdmin";
+import { IoSearchOutline } from "react-icons/io5";
 
 const ProductAdmin = () => {
-  return (
-    <div>
-      Product Admin
-    </div>
-  )
-}
+  const [productData, setProductData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [totalPageCount, setTotalPageCount] = useState(1);
+  const [search, setSearch] = useState("");
 
-export default ProductAdmin
+  const fetchProductData = async () => {
+    try {
+      setLoading(true);
+      const response = await Axios({
+        ...SummeryApi.getProduct,
+        data: {
+          page: page,
+          search: search,
+        },
+      });
+
+      const { data: responseData } = response;
+
+      console.log(responseData);
+      if (responseData.success) {
+        setTotalPageCount(responseData.totalNoPage);
+        setProductData(responseData.data);
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductData();
+  }, [page]);
+
+  const handleNext = () => {
+    if (page !== totalPageCount) setPage((preve) => preve + 1);
+  };
+
+  const handlePrevious = () => {
+    if (page !== 1) setPage((preve) => preve - 1);
+  };
+
+  const handleOnChange = (e) => {
+    const { value } = e.target;
+
+    setSearch(value);
+    setPage(1);
+  };
+
+  useEffect(() => {
+    let flag = true;
+
+    const interval = setTimeout(() => {
+      if (flag) {
+        fetchProductData();
+        flag = false;
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(interval);
+    };
+  }, [search]);
+
+  return (
+    <section>
+      <div className="sticky top-20 z-10 p-2 bg-white shadow-md flex items-center justify-between gap-4">
+        <h2 className="font-semibold">Product</h2>
+        <div className="h-full min-w-24 max-w-80 ml-auto flex px-4 bg-blue-50 items-center gap-2 border focus-within:border-amber-300 rounded">
+          <IoSearchOutline size={18} />
+          <input
+            type="text"
+            name=""
+            id=""
+            value={search}
+            placeholder="Search product here..."
+            className="h-fullb w-full py-2  outline-none"
+            onChange={handleOnChange}
+          />
+        </div>
+      </div>
+
+      {loading && <Loading />}
+
+      <div className="p-4 bg-blue-50">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 min-h-[55vh]">
+          {productData.map((product, index) => {
+            return (
+              <ProductCardAdmin key={product._id || index} data={product} />
+            );
+          })}
+        </div>
+
+        <div className=" flex justify-between my-4">
+          <button
+            onClick={handlePrevious}
+            className="border border-amber-300 px-4 py-1 hover:bg-amber-300 rounded"
+          >
+            Previous
+          </button>
+          <button className="w-full bg-slate-100">
+            {page}/{totalPageCount}
+          </button>
+          <button
+            onClick={handleNext}
+            className="border border-amber-300 px-4 py-1 hover:bg-amber-300 rounded"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ProductAdmin;
