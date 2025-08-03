@@ -45,15 +45,10 @@ export const createProductController = async (request,response) =>{
 
 export const getProductController = async (request,response) =>{
     try {
-        const { page, limit, search } = request.body;
+        let { page, limit, search } = request.body;
 
-        if(!page){
-            page = 2
-        }
-
-        if(!limit){
-            limit = 10
-        }
+       page = page || 2;
+       limit = limit || 10;
 
         const query = search ? {
             $text : {
@@ -63,8 +58,9 @@ export const getProductController = async (request,response) =>{
 
         const skip = (page - 1)*limit
 
+        //.sort({createdAt : -1 })
         const [data,totalCount] = await Promise.all([
-            ProductModel.find(query).sort({createdAt : -1 }).skip(skip).limit(limit),
+            ProductModel.find(query).skip(skip).limit(limit),
             ProductModel.countDocuments(query)
         ])
 
@@ -79,7 +75,7 @@ export const getProductController = async (request,response) =>{
     } catch (error) {
         return response.status(500).json({
             message : error.message || error,
-            errot : true,
+            error : true,
             success : false
         })
     }
