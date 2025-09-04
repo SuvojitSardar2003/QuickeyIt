@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { act } from "react";
 
 const initialValue = {
     allCategory : [],
+    loadingCategory : false,
     allSubCategory : [],
     product : []
 }
@@ -14,12 +16,15 @@ const productSlice = createSlice({
             //console.log("all category redux store",action.payload)
             state.allCategory = [...action.payload]
         },
+        setLoadingCategory : (state,action)=>{
+            state.loadingCategory = action.payload
+        },
         setAllSubCategory : (state,action)=>{
             state.allSubCategory = [...action.payload]
         }
     }
 })
 
-export const { setAllCategory, setAllSubCategory } = productSlice.actions
+export const { setAllCategory, setAllSubCategory, setLoadingCategory } = productSlice.actions
 
 export default productSlice.reducer

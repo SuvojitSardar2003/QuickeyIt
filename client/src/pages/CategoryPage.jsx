@@ -11,7 +11,7 @@ import ConfirmBox from "../components/ConfirmBox";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllCategory } from "../store/productSlice";
+import { setAllCategory, setLoadingCategory } from "../store/productSlice";
 
 const CategoryPage = () => {
   const dispatch = useDispatch();
@@ -36,6 +36,7 @@ const CategoryPage = () => {
 
   const fetchCategory = async () => {
     try {
+      dispatch(setLoadingCategory(true));
       setLoading(true);
       const response = await Axios({
         ...SummaryApi.getCategory,
@@ -48,7 +49,8 @@ const CategoryPage = () => {
       //console.log(responseData);
     } catch (error) {
     } finally {
-      setLoading(false);
+      dispatch(setLoadingCategory(false));
+      //setLoading(false);
     }
   };
 
