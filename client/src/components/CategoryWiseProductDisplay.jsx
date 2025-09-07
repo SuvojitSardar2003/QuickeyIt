@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import AxiosToastError from "../utils/AxiosToastError.js";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
+import CardLoading from "./CardLoading.jsx";
+import CardProductHome from "./CardProductHome.jsx";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const CategoryWiseProductDisplay = ({ id, name }) => {
   const [data, setData] = useState([]);
@@ -33,6 +36,8 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
   useEffect(() => {
     fetchCategoryWiseProduct();
   }, []);
+
+  const loadingCardNumber = new Array(6).fill(null);
   return (
     <div>
       <div className="container mx-auto p-4 flex items-center justify-between gap-4">
@@ -42,11 +47,32 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
         </Link>
       </div>
 
-      <div></div>
+      <div className="flex items-center gap-4 md:gap-6 lg:gap-8 container mx-auto px-4 overflow-hidden">
+        {loading &&
+          loadingCardNumber.map((loading, index) => {
+            return <CardLoading key={"CategorywisepProductDisplay" + index} />;
+          })}
+
+        {data.map((p, index) => {
+          return (
+            <CardProductHome
+              data={p}
+              key={p._id + "CategorywisepProductDisplay" + index}
+            />
+          );
+        })}
+
+        <div className="w-full left-0 right-0 container mx-auto px-2 absolute hidden lg:flex justify-between">
+          <button className="z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-2 rounded-full">
+            <FaAngleLeft />
+          </button>
+          <button className="z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-2 rounded-full">
+            <FaAngleRight />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default CategoryWiseProductDisplay;
-
-1:10:16
