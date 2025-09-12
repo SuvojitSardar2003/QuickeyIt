@@ -34,7 +34,7 @@ const CategoryPage = () => {
     setCategotyData(allCategory);
   }, [allCategory]);
 
-  const fetchCategory = async () => {
+  /* const fetchCategory = async () => {
     try {
       dispatch(setLoadingCategory(true));
       setLoading(true);
@@ -57,6 +57,7 @@ const CategoryPage = () => {
   useEffect(() => {
     fetchCategory();
   }, []);
+ */
 
   const handleDeleteCategory = async () => {
     try {

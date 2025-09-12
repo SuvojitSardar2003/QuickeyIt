@@ -4,7 +4,7 @@ import { validURLConvert } from "../utils/validURLConvert";
 import { Link } from "react-router-dom";
 
 const CardProductHome = ({ data }) => {
-  const url = `product/${validURLConvert(data.name)}-${validURLConvert(
+  const url = `/product/${validURLConvert(data.name)}-${validURLConvert(
     data._id
   )}`;
   return (

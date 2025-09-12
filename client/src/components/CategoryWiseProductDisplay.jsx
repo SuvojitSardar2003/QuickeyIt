@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import AxiosToastError from "../utils/AxiosToastError.js";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
-import CardLoading from "./CardLoading.jsx";
-import CardProductHome from "./CardProductHome.jsx";
+import CardLoading from "./CardLoading";
+import CardProductHome from "./CardProductHome";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const CategoryWiseProductDisplay = ({ id, name }) => {
