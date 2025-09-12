@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { fetchSubCategory } from "../utils/fetchSubCategory.js";
 import Loading from "../components/Loading.jsx";
 import CardProductHome from "../components/CardProductHome.jsx";
+import { useSelector } from "react-redux";
 
 const ProductListPage = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,13 @@ const ProductListPage = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [subCategories, setSubCategories] = useState([]);
   const params = useParams();
+  const AllsubCategoryName = useSelector(
+    (state) => state.product.allSubCategory
+  );
+  const [DisplaySubCategory, setDisplaySubCategory] = useState([]);
+
+  console.log(`All Sub Category Names:${AllsubCategoryName}`);
+
   const subCategory = params?.subCategory?.split("-");
   const subCategoryName = subCategory
     ?.slice(0, subCategory?.length - 1)
@@ -66,14 +74,37 @@ const ProductListPage = () => {
       setSubCategories(result);
     };
     load();
-  }, [params]);
+
+    const sub = AllsubCategoryName.filter((s) => {
+      const filterData = s.category.some((el) => {
+        return el._id == categoryId;
+      });
+      return filterData ? filterData : false;
+    });
+    setDisplaySubCategory(sub);
+  }, [params, AllsubCategoryName]);
 
   console.log(subCategories);
   return (
     <section className="sticky top-28 lg:top-20">
       <div className="container sticky top-28 mx-auto grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr]">
         {/*sub category*/}
-        <div className="min-h-[79vh]">sub category</div>
+        <div className="min-h-[79vh] max-h-[79vh] overflow-y-scroll grid gap-1 shadow-md scrollbarCustom">
+          {DisplaySubCategory.map((s, index) => {
+            return (
+              <div className="w-full p-2 bg-white">
+                <div className="w-full">
+                  <img
+                    src={s.image}
+                    alt="subCategory"
+                    className="w-14 h-full object-scale-down"
+                  />
+                </div>
+                <p className="-mt-6 text-xs text-center">{s.name}</p>
+              </div>
+            );
+          })}
+        </div>
 
         {/*product*/}
         <div className="">
@@ -82,7 +113,7 @@ const ProductListPage = () => {
           </div>
 
           <div>
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 p-4 gap-4">
               {data.map((p, index) => {
                 return (
                   <CardProductHome
