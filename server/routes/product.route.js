@@ -2,6 +2,7 @@ import { Router } from "express";
 import auth from "../middleware/auth.js";
 import {
   createProductController,
+  deleteProductDetails,
   getProductByCategory,
   getProductByCategoryAndSubCategory,
   getProductController,
@@ -28,5 +29,8 @@ productRouter.put(
   admin,
   updateProductDetailsController
 );
+
+//delete product
+productRouter.delete("/delete-product", auth, admin, deleteProductDetails);
 
 export default productRouter;
