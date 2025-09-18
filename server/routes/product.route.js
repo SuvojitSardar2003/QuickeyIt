@@ -6,7 +6,9 @@ import {
   getProductByCategoryAndSubCategory,
   getProductController,
   getProductDetails,
+  updateProductDetailsController,
 } from "../controllers/product.controllers.js";
+import { admin } from "../middleware/admin.js";
 
 const productRouter = Router();
 
@@ -18,5 +20,13 @@ productRouter.post(
   getProductByCategoryAndSubCategory
 );
 productRouter.post("/get-product-details", getProductDetails);
+
+//update product
+productRouter.put(
+  "/update-product-details",
+  auth,
+  admin,
+  updateProductDetailsController
+);
 
 export default productRouter;

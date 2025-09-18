@@ -80,7 +80,11 @@ export const getProductController = async (request, response) => {
 
     //.sort({createdAt : -1 })
     const [data, totalCount] = await Promise.all([
-      ProductModel.find(query).skip(skip).limit(limit),
+      ProductModel.find(query)
+        .skip(skip)
+        .limit(limit)
+        .populate("category subCategory"),
+
       ProductModel.countDocuments(query),
     ]);
 
@@ -189,6 +193,41 @@ export const getProductDetails = async (request, response) => {
     return response.json({
       message: "product details",
       data: product,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+//update product
+export const updateProductDetailsController = async (request, response) => {
+  try {
+    const { _id } = request.body;
+
+    if (!_id) {
+      return response.status(400).json({
+        message: "provide product _id",
+        error: true,
+        success: false,
+      });
+    }
+
+    const updateProduct = await ProductModel.updateOne(
+      { _id: _id },
+      {
+        ...request.body,
+      }
+    );
+
+    return response.json({
+      message: "updated successfully",
+      data: updateProduct,
       error: false,
       success: true,
     });
