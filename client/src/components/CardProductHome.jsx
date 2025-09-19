@@ -3,6 +3,7 @@ import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import { validURLConvert } from "../utils/validURLConvert";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { pricewithDiscount } from "../utils/PriceWithDiscount";
 
 const CardProductHome = ({ data }) => {
   const url = `/product/${validURLConvert(data.name)}-${validURLConvert(
@@ -23,18 +24,35 @@ const CardProductHome = ({ data }) => {
         />
       </div>
 
-      <div className="rounded text-xs w-fit p[1px] px-2 text-green-600 bg-green-50">
-        10 min
+      <div className="flex items-center justify-between gap-1">
+        <div className="rounded text-xs w-fit p[1px] px-2 text-green-600 bg-green-50">
+          10 min
+        </div>
+        <div>
+          {Boolean(data.discount) && (
+            <p className="text-green-600 bg-green-100 px-2 w-fit text-xs rounded-full">
+              {data.discount}% discount
+            </p>
+          )}
+        </div>
       </div>
+
       <div className="font-medium text-ellipsis line-clamp-2">{data.name}</div>
-      <div className="w-fit">{data.unit}</div>
+      <div className="w-fit">{data.unit} </div>
 
       <div className="flex items-center justify-between gap-3">
-        <div className="font-semibold">{DisplayPriceInRupees(data.price)}</div>
+        <div className="font-semibold">
+          {DisplayPriceInRupees(pricewithDiscount(data.price, data.discount))}
+        </div>
+
         <div className="">
-          <button className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded">
-            Add
-          </button>
+          {data.stock == 0 ? (
+            <p className="text-red-500 text-sm text-center">Out of stock</p>
+          ) : (
+            <button className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded">
+              Add
+            </button>
+          )}
         </div>
       </div>
     </Link>

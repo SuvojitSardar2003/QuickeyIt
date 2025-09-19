@@ -18,9 +18,10 @@ productRouter.post("/get", getProductController);
 productRouter.post("/get-product-by-category", getProductByCategory);
 productRouter.post(
   "/get-product-by-category-and-subcategory",
+  auth,
   getProductByCategoryAndSubCategory
 );
-productRouter.post("/get-product-details", getProductDetails);
+productRouter.post("/get-product-details", auth, getProductDetails);
 
 //update product
 productRouter.put(

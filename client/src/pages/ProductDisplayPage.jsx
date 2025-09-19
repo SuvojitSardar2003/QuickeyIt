@@ -9,10 +9,11 @@ import Divider from "../components/Divider";
 import image1 from "../assets/minute_delivery.png";
 import image2 from "../assets/Best_Prices_Offers.png";
 import image3 from "../assets/Wide_Assortment.png";
+import { pricewithDiscount } from "../utils/PriceWithDiscount";
 
 const ProductDisplayPage = () => {
   const params = useParams();
-  let productId = params?.product?.split("-")?.slice(-1);
+  const productId = params?.product?.split("-")?.slice(-1);
   const [data, setData] = useState({
     name: "",
     image: [],
@@ -46,6 +47,7 @@ const ProductDisplayPage = () => {
 
   useEffect(() => {
     fetchProductDetails();
+    window.scrollTo(0, 0);
   }, [params]);
 
   const handleScrollRight = () => {
@@ -73,7 +75,7 @@ const ProductDisplayPage = () => {
                 key={img + index + "point"}
                 onClick={() => setImage(index)}
                 className={` w-3 h-3 lg:w-5 lg:h-5 rounded-full cursor-pointer ${
-                  index === image ? "bg-red-200" : "bg-slate-200"
+                  index === image ? "bg-red-400" : "bg-slate-200"
                 }`}
               />
             );
@@ -119,6 +121,30 @@ const ProductDisplayPage = () => {
             </button>
           </div>
         </div>
+
+        <div className="my-4 grid gap-3">
+          <div className="p-4 lg:pl-7 text-base lg:text-lg">
+            <p className="font-semibold">Description</p>
+            <p className="text-base">{data.description}</p>
+          </div>
+
+          <div className="p-4 lg:pl-7 text-base lg:text-lg">
+            <p className="font-semibold">Unit</p>
+            <p className="text-base">{data.unit}</p>
+          </div>
+
+          <div className="p-4 lg:pl-7 text-base lg:text-lg">
+            {data?.more_details &&
+              Object.keys(data?.more_details).map((element, index) => {
+                return (
+                  <div key={element + index}>
+                    <p className="font-semibold">{element}</p>
+                    <p className="text-base">{data?.more_details[element]}</p>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
       </div>
 
       <div className="p-4 lg:pl-7 text-base lg:text-lg">
@@ -128,15 +154,32 @@ const ProductDisplayPage = () => {
         <Divider />
         <div>
           <p className="">Price</p>
-          <div className="border border-green-600 px-4 py-2 rounded bg-green-50 hover:bg-green-600 w-fit">
-            <p className="font-semibold text-lg lg:text-xl">
-              {DisplayPriceInRupees(data.price)}
-            </p>
+          <div className="flex items-center gap-2 lg:gap-4">
+            <div className="border border-green-600 px-4 py-2 rounded bg-green-50 hover:bg-green-600 w-fit">
+              <p className="font-semibold text-lg lg:text-xl">
+                {DisplayPriceInRupees(
+                  pricewithDiscount(data.price, data.discount)
+                )}
+              </p>
+            </div>
+
+            {data.discount && (
+              <p className="line-through text-lg">
+                {DisplayPriceInRupees(data.price)}
+              </p>
+            )}
+
+            {data.discount && (
+              <p className="font-bold text-green-600 lg:text-2xl">
+                {data.discount}%{" "}
+                <span className="text-base text-neutral-500">Discount</span>
+              </p>
+            )}
           </div>
         </div>
 
         {data.stock === 0 ? (
-          <p className="text-lg text-red-500">Out of Stock</p>
+          <p className="text-lg text-red-500 my-2">Out of Stock</p>
         ) : (
           <button className="my-4 px-4 py-1 bg-green-700 hover:bg-green-600 text-white rounded">
             Add
