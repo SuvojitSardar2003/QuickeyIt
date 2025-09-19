@@ -69,20 +69,39 @@ const ProductListPage = () => {
 
   useEffect(() => {
     fetchProductData();
+    window.scrollTo(0, 0);
     //fetchSubCategory();
+    /* const load = async () => {
+      const result = await fetchSubCategory();
+      setSubCategories(result);
+
+      // filter subcategories for this category, but keep result order same as in `result`
+    const sub = result.filter((s) =>
+      s.category.some((el) => el._id == categoryId)
+    );
+    setDisplaySubCategory(sub);
+    };
+    load(); */
+
     const load = async () => {
       const result = await fetchSubCategory();
       setSubCategories(result);
+
+      // keep order same as AllsubCategoryName
+      const sub = AllsubCategoryName.filter((s) =>
+        s.category.some((el) => el._id == categoryId)
+      );
+      setDisplaySubCategory(sub);
     };
     load();
 
-    const sub = AllsubCategoryName.filter((s) => {
+    /* const sub = AllsubCategoryName.filter((s) => {
       const filterData = s.category.some((el) => {
         return el._id == categoryId;
       });
       return filterData ? filterData : false;
     });
-    setDisplaySubCategory(sub);
+    setDisplaySubCategory(sub); */
   }, [params, AllsubCategoryName]);
 
   console.log(subCategories);
@@ -90,11 +109,15 @@ const ProductListPage = () => {
     <section className="sticky top-28 lg:top-20">
       <div className="container lg:max-w-full lg:px-16 sticky top-28 mx-auto grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr]">
         {/*sub category*/}
-        <div className="min-h-[88vh] max-h-[88vh] overflow-y-scroll grid gap-1 shadow-md scrollbarCustom bg-white py-2">
+        <div className="min-h-[85vh] max-h-[85vh] overflow-y-scroll grid gap-1 shadow-md scrollbarCustom bg-white py-2">
           {DisplaySubCategory.map((s, index) => {
-            const link = `/${validURLConvert(s?.category[0]?.name)}-${
+            /* const link = `/${validURLConvert(s?.category[0]?.name)}-${
               s?.category[0]?._id
-            }/${validURLConvert(s.name)}-${s._id}`;
+            }/${validURLConvert(s.name)}-${s._id}`; */
+
+            const link = `/${validURLConvert(
+              params.category.split("-").slice(0, -1).join(" ")
+            )}-${categoryId}/${validURLConvert(s.name)}-${s._id}`;
 
             return (
               <Link

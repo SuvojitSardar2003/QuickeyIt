@@ -6,10 +6,13 @@ import SummaryApi from "../common/SummaryApi";
 import CardLoading from "./CardLoading";
 import CardProductHome from "./CardProductHome";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { validURLConvert } from "../utils/validURLConvert.js";
 
 const CategoryWiseProductDisplay = ({ id, name }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const subCategoryData = useSelector((state) => state.product.allSubCategory);
   const containerRef = useRef();
 
   const fetchCategoryWiseProduct = async () => {
@@ -48,11 +51,28 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
     containerRef.current.scrollLeft -= 200;
   };
 
+  const handleRedirectProductListpage = () => {
+    const subcategory = subCategoryData.find((sub) => {
+      const filterData = sub.category.some((c) => {
+        return c._id == id;
+      });
+
+      return filterData ? true : null;
+    });
+    const url = `/${validURLConvert(name)}-${id}/${validURLConvert(
+      subcategory?.name
+    )}-${subcategory?._id}`;
+
+    return url;
+  };
+
+  const redirectURL = handleRedirectProductListpage();
+
   return (
     <div>
       <div className="container mx-auto p-4 flex items-center justify-between gap-4">
         <h3 className="font-semibold text-lg md:text-xl">{name}</h3>
-        <Link to="" className="text-green-600 hover:text-green-400">
+        <Link to={redirectURL} className="text-green-600 hover:text-green-400">
           See All
         </Link>
       </div>
