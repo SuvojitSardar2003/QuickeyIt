@@ -25,6 +25,16 @@ const SearchBar = () => {
     setIsSearchPage(isSearch);
   }, [location]);
 
+  const handleOnChange = (e) => {
+    const value = e.target.value;
+
+    const url = `/search?q=${value}`;
+    navigate(url);
+  };
+
+  const params = useLocation();
+  const searchText = params?.search?.slice(3);
+
   //console.log("search", isSearchPage);
   return (
     <>
@@ -96,6 +106,8 @@ const SearchBar = () => {
                 autoFocus={true}
                 id=""
                 className="w-full min-w-[500px] lg:min-w[420px] h-10 rounded-lg  overflow-hidden flex items-center text-black bg-transparent outline-none"
+                onChange={handleOnChange}
+                defaultValue={searchText}
               />
             </div>
           )}
