@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
+import logo2 from "../assets/logo2.png";
 import SearchBar from "./SearchBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -48,7 +49,7 @@ const Header = () => {
           <div className="lg:h-full">
             <Link to={"/"} className="h-full flex justify-center items-center">
               <img
-                src={logo}
+                src={logo2}
                 width={170}
                 height={60}
                 alt="logo"

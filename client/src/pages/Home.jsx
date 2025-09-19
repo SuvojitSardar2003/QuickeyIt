@@ -70,7 +70,7 @@ const Home = () => {
   }, []);
 
   const handleRedirectProductListPage = (id, cat) => {
-    console.log(id, cat);
+    //console.log(id, cat);
     const subcategory = subCategoryData.find((sub) => {
       const filterData = sub.category.some((c) => {
         return c._id == id;
@@ -78,11 +78,13 @@ const Home = () => {
       return filterData ? true : null;
     });
 
+    if (!subcategory) return;
+
     const url = `/${validURLConvert(cat)}-${id}/${validURLConvert(
       subcategory.name
     )}-${subcategory._id}`;
     navigate(url);
-    console.log(url);
+    //console.log(url);
   };
 
   return (
