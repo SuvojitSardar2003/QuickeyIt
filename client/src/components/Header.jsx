@@ -41,6 +41,8 @@ const Header = () => {
 
   //console.log("search", isSearchPage);
 
+
+
   return (
     <>
       <header className="h-28 lg:h-20 lg:shadow-md sticky top-0 z-40 bg-white">
