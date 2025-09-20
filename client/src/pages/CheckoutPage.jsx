@@ -25,37 +25,36 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
 
   const handleCashOnDelivery = async () => {
-    /* try {
-          const response = await Axios({
-            ...SummaryApi.CashOnDeliveryOrder,
-            data : {
-              list_items : cartItemsList,
-              addressId : addressList[selectAddress]?._id,
-              subTotalAmt : totalPrice,
-              totalAmt :  totalPrice,
-            }
-          })
+    try {
+      const response = await Axios({
+        ...SummaryApi.CashOnDeliveryOrder,
+        data: {
+          list_items: cartItemsList,
+          addressId: addressList[selectAddress]?._id,
+          subTotalAmt: totalPrice,
+          totalAmt: totalPrice,
+        },
+      });
 
-          const { data : responseData } = response
+      const { data: responseData } = response;
 
-          if(responseData.success){
-              toast.success(responseData.message)
-              if(fetchCartItem){
-                fetchCartItem()
-              }
-              if(fetchOrder){
-                fetchOrder()
-              }
-              navigate('/success',{
-                state : {
-                  text : "Order"
-                }
-              })
-          }
-
-      } catch (error) {
-        AxiosToastError(error)
-      } */
+      if (responseData.success) {
+        toast.success(responseData.message);
+        if (fetchCartItem) {
+          fetchCartItem();
+        }
+        if (fetchOrder) {
+          fetchOrder();
+        }
+        navigate("/success", {
+          state: {
+            text: "Order",
+          },
+        });
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
   };
 
   const handleOnlinePayment = async () => {
