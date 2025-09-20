@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, use, useContext, useEffect, useState } from "react";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { handleAddItemCart } from "../store/cartProduct";
 import AxiosToastError from "../utils/AxiosToastError";
 import toast from "react-hot-toast";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
+import { handleAddAddress } from "../store/addressSlice";
 
 export const GlobalContext = createContext(null);
 
@@ -17,6 +18,7 @@ function GlobalProvider({ children }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [notDiscountTotalPrice, setNotDiscountTotalPrice] = useState(0);
   const cartItem = useSelector((state) => state?.cartItem.cart);
+  const user = useSelector((state) => state?.user);
 
   // Fetch Cart Item
   const fetchCartItem = async () => {
@@ -76,10 +78,6 @@ function GlobalProvider({ children }) {
     }
   };
 
-  useEffect(() => {
-    fetchCartItem();
-  }, []);
-
   //total item and total price
   useEffect(() => {
     const totalQty = cartItem.reduce((preve, curr) => {
@@ -102,6 +100,33 @@ function GlobalProvider({ children }) {
     setNotDiscountTotalPrice(notDiscountPrice);
   }, [cartItem]);
 
+  const handleLogoutOut = () => {
+    localStorage.clear();
+    dispatch(handleAddItemCart([]));
+  };
+
+  const fetchAddress = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getAddress,
+      });
+
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        dispatch(handleAddAddress(responseData.data));
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItem();
+    handleLogoutOut();
+    fetchAddress();
+  }, [user]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -111,6 +136,7 @@ function GlobalProvider({ children }) {
         totalPrice,
         totalQtyItem,
         notDiscountTotalPrice,
+        fetchAddress,
       }}
     >
       {children}

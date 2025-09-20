@@ -24,7 +24,7 @@ import CartMobileLink from "./components/CartMobile";
 
 function App() {
   const dispatch = useDispatch();
-  //const location = useLocation();
+  const location = useLocation();
 
   const fetchUser = async () => {
     //console.log("User Data", userData.data);
@@ -100,7 +100,7 @@ function App() {
         </main>
         <Footer />
         <Toaster />
-        <CartMobileLink />
+        {location.pathname !== "/checkout" && <CartMobileLink />}
       </GlobalProvider>
     </>
   );

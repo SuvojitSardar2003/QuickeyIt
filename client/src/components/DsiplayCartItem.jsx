@@ -11,7 +11,8 @@ import imageEmpty from "../assets/empty_cart.webp";
 import toast from "react-hot-toast";
 
 const DisplayCartItem = ({ close }) => {
-  const { notDiscountTotalPrice, totalPrice, totalQty } = useGlobalContext();
+  const { notDiscountTotalPrice, totalPrice, totalQtyItem } =
+    useGlobalContext();
   const cartItem = useSelector((state) => state.cartItem.cart);
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const DisplayCartItem = ({ close }) => {
                 <h3 className="font-semibold">Bill details</h3>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Items total</p>
+                  {/*important */}
                   <p className="flex items-center gap-2">
                     <span className="line-through text-neutral-400">
                       {DisplayPriceInRupees(notDiscountTotalPrice)}
@@ -104,7 +106,7 @@ const DisplayCartItem = ({ close }) => {
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Quntity total</p>
-                  <p className="flex items-center gap-2">{totalQty} item</p>
+                  <p className="flex items-center gap-2">{totalQtyItem} item</p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Delivery Charge</p>

@@ -125,6 +125,14 @@ const SummaryApi = {
     url: "/api/cart/delete-qty",
     method: "delete",
   },
+  createAddress: {
+    url: "/api/address/create",
+    method: "post",
+  },
+  getAddress: {
+    url: "/api/address/get",
+    method: "get",
+  },
 };
 
 export default SummaryApi;
