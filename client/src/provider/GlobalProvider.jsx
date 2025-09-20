@@ -15,6 +15,7 @@ function GlobalProvider({ children }) {
   const dispatch = useDispatch();
   const [totalQtyItem, setTotalQtyItem] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [notDiscountTotalPrice, setNotDiscountTotalPrice] = useState(0);
   const cartItem = useSelector((state) => state?.cartItem.cart);
 
   // Fetch Cart Item
@@ -46,11 +47,13 @@ function GlobalProvider({ children }) {
 
       const { data: responseData } = response;
       if (responseData.success) {
-        toast.success(responseData.message);
+        //toast.success(responseData.message);
         fetchCartItem();
+        return responseData;
       }
     } catch (error) {
       AxiosToastError(error);
+      return error;
     }
   };
 
@@ -87,11 +90,16 @@ function GlobalProvider({ children }) {
     const totalP = cartItem.reduce((preve, curr) => {
       return (
         preve +
-        pricewithDiscount(curr.productId.price, curr.productId.discount) *
-          curr.quantity
+        pricewithDiscount(curr?.productId?.price, curr?.productId?.discount) *
+          curr?.quantity
       );
     }, 0);
     setTotalPrice(totalP);
+
+    const notDiscountPrice = cartItem.reduce((preve, curr) => {
+      return preve + curr?.productId?.price * curr.quantity;
+    }, 0);
+    setNotDiscountTotalPrice(notDiscountPrice);
   }, [cartItem]);
 
   return (
@@ -102,6 +110,7 @@ function GlobalProvider({ children }) {
         deleteCartItem,
         totalPrice,
         totalQtyItem,
+        notDiscountTotalPrice,
       }}
     >
       {children}

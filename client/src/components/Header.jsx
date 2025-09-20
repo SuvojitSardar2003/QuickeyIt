@@ -12,6 +12,7 @@ import UserMenu from "./UserMenu";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
 import { useGlobalContext } from "../provider/GlobalProvider";
+import DsiplayCartItem from "./DsiplayCartItem";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ const Header = () => {
   }, [cartItem]); */
 
   const { totalPrice, totalQtyItem } = useGlobalContext();
+  const [openCartSection, setOpenCartSection] = useState(false);
 
   return (
     <>
@@ -142,7 +144,10 @@ const Header = () => {
               )}
 
               {/*h-14 w-28*/}
-              <button className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-2 gap-2">
+              <button
+                onClick={() => setOpenCartSection(true)}
+                className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-2 gap-2"
+              >
                 <div className="flex items-center">
                   {/*add to cart icon*/}
                   <div>
@@ -169,6 +174,10 @@ const Header = () => {
         <div className="lg:hidden h-10 container mx-auto px-2">
           <SearchBar></SearchBar>
         </div>
+
+        {openCartSection && (
+          <DsiplayCartItem close={() => setOpenCartSection(false)} />
+        )}
       </header>
       {/*<div>Header</div>;*/}
     </>
