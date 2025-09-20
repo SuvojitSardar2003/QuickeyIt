@@ -20,6 +20,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import CartMobileLink from "./components/CartMobile"; */
 //import { handleAddItemCart } from "./store/cartProduct";
 import GlobalProvider from "./provider/GlobalProvider";
+import CartMobileLink from "./components/CartMobile";
 
 function App() {
   const dispatch = useDispatch();
@@ -99,6 +100,7 @@ function App() {
         </main>
         <Footer />
         <Toaster />
+        <CartMobileLink />
       </GlobalProvider>
     </>
   );
