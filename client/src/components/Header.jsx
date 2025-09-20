@@ -11,6 +11,7 @@ import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from "./UserMenu";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
+import { useGlobalContext } from "../provider/GlobalProvider";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -48,10 +49,10 @@ const Header = () => {
   //console.log("cartItem:", cartItem);
 
   //total item and total price
-  const [totalQtyItem, setTotalQtyItem] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  /* const [totalQtyItem, setTotalQtyItem] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); */
 
-  useEffect(() => {
+  /* useEffect(() => {
     const totalQty = cartItem.reduce((preve, curr) => {
       return preve + curr.quantity;
     }, 0);
@@ -65,7 +66,9 @@ const Header = () => {
       );
     }, 0);
     setTotalPrice(totalP);
-  }, [cartItem]);
+  }, [cartItem]); */
+
+  const { totalPrice, totalQtyItem } = useGlobalContext();
 
   return (
     <>

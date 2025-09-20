@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleAddItemCart } from "../store/cartProduct";
 import AxiosToastError from "../utils/AxiosToastError";
 import toast from "react-hot-toast";
+import { pricewithDiscount } from "../utils/PriceWithDiscount";
 
 export const GlobalContext = createContext(null);
 
@@ -12,6 +13,9 @@ export const useGlobalContext = () => useContext(GlobalContext);
 
 function GlobalProvider({ children }) {
   const dispatch = useDispatch();
+  const [totalQtyItem, setTotalQtyItem] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const cartItem = useSelector((state) => state?.cartItem.cart);
 
   // Fetch Cart Item
   const fetchCartItem = async () => {
@@ -73,9 +77,32 @@ function GlobalProvider({ children }) {
     fetchCartItem();
   }, []);
 
+  //total item and total price
+  useEffect(() => {
+    const totalQty = cartItem.reduce((preve, curr) => {
+      return preve + curr.quantity;
+    }, 0);
+    setTotalQtyItem(totalQty);
+
+    const totalP = cartItem.reduce((preve, curr) => {
+      return (
+        preve +
+        pricewithDiscount(curr.productId.price, curr.productId.discount) *
+          curr.quantity
+      );
+    }, 0);
+    setTotalPrice(totalP);
+  }, [cartItem]);
+
   return (
     <GlobalContext.Provider
-      value={{ fetchCartItem, updateCartItem, deleteCartItem }}
+      value={{
+        fetchCartItem,
+        updateCartItem,
+        deleteCartItem,
+        totalPrice,
+        totalQtyItem,
+      }}
     >
       {children}
     </GlobalContext.Provider>
