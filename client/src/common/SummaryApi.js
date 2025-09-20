@@ -133,6 +133,14 @@ const SummaryApi = {
     url: "/api/address/get",
     method: "get",
   },
+  updateAddress: {
+    url: "/api/address/update",
+    method: "put",
+  },
+  disableAddress: {
+    url: "/api/address/disable",
+    method: "delete",
+  },
 };
 
 export default SummaryApi;
