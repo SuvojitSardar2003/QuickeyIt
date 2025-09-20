@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from "./UserMenu";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
+import { pricewithDiscount } from "../utils/PriceWithDiscount";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -57,8 +58,13 @@ const Header = () => {
     setTotalQtyItem(totalQty);
 
     const totalP = cartItem.reduce((preve, curr) => {
-      return preve + curr.totalPrice;
+      return (
+        preve +
+        pricewithDiscount(curr.productId.price, curr.productId.discount) *
+          curr.quantity
+      );
     }, 0);
+    setTotalPrice(totalP);
   }, [cartItem]);
 
   return (
