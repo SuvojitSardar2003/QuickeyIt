@@ -4,12 +4,40 @@ import { validURLConvert } from "../utils/validURLConvert";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
+import SummaryApi from "../common/SummaryApi";
+import AxiosToastError from "../utils/AxiosToastError";
+import Axios from "../utils/Axios";
+import toast from "react-hot-toast";
 
 const CardProductHome = ({ data }) => {
   const url = `/product/${validURLConvert(data.name)}-${validURLConvert(
     data._id
   )}`;
   const [loading, setLoading] = useState(false);
+
+  const handleAddTocart = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      setLoading(true);
+      const response = await Axios({
+        ...SummaryApi.addToCart,
+        data: { productId: data?._id },
+      });
+
+      const { data: responseData } = response;
+
+      if (responseData?.success) {
+        // you can show toast here for success
+        toast.success(responseData?.message || "Item added to cart");
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Link
@@ -49,7 +77,10 @@ const CardProductHome = ({ data }) => {
           {data.stock == 0 ? (
             <p className="text-red-500 text-sm text-center">Out of stock</p>
           ) : (
-            <button className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded">
+            <button
+              onClick={handleAddTocart}
+              className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded"
+            >
               Add
             </button>
           )}

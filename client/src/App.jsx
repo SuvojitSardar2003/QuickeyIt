@@ -18,6 +18,8 @@ import SummaryApi from "./common/SummaryApi";
 /* import GlobalProvider from "./provider/GlobalProvider";
 import { FaCartShopping } from "react-icons/fa6";
 import CartMobileLink from "./components/CartMobile"; */
+//import { handleAddItemCart } from "./store/cartProduct";
+import GlobalProvider from "./provider/GlobalProvider";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,21 +81,25 @@ function App() {
   };
 
   useEffect(() => {
+    //console.log("App mounted ✅");
     fetchUser();
     fetchCategory();
     fetchSubCategory();
+    //fetchCartItem();
   }, []);
 
   return (
     <>
-      <Header />
-      <main className="min-h-[80vh]">
-        {/*className="text-3xl font-bold underline text-green-500"*/}
-        {/*/QuickeyIt*/}
-        <Outlet />
-      </main>
-      <Footer />
-      <Toaster />
+      <GlobalProvider>
+        <Header />
+        <main className="min-h-[80vh]">
+          {/*className="text-3xl font-bold underline text-green-500"*/}
+          {/*/QuickeyIt*/}
+          <Outlet />
+        </main>
+        <Footer />
+        <Toaster />
+      </GlobalProvider>
     </>
   );
 }

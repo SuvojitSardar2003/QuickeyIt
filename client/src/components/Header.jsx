@@ -9,6 +9,7 @@ import { BsCart4 } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from "./UserMenu";
+import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -41,7 +42,24 @@ const Header = () => {
 
   //console.log("search", isSearchPage);
 
+  const cartItem = useSelector((state) => state?.cartItem.cart);
 
+  //console.log("cartItem:", cartItem);
+
+  //total item and total price
+  const [totalQtyItem, setTotalQtyItem] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const totalQty = cartItem.reduce((preve, curr) => {
+      return preve + curr.quantity;
+    }, 0);
+    setTotalQtyItem(totalQty);
+
+    const totalP = cartItem.reduce((preve, curr) => {
+      return preve + curr.totalPrice;
+    }, 0);
+  }, [cartItem]);
 
   return (
     <>
@@ -115,15 +133,23 @@ const Header = () => {
               )}
 
               {/*h-14 w-28*/}
-              <button className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-1">
+              <button className="bg-green-700 hover:bg-green-600 rounded flex justify-center items-center text-white px-3 py-2 gap-2">
                 <div className="flex items-center">
                   {/*add to cart icon*/}
                   <div>
                     <BsCart4 size={26} className="hover:animate-bounce" />
                   </div>
                   <div className="font-semibold">
-                    <p>1 items</p>
-                    <p>total price</p>
+                    {cartItem[0] ? (
+                      <div>
+                        <p>{totalQtyItem} Items</p>
+                        <p>{DisplayPriceInRupees(totalPrice)}</p>
+                      </div>
+                    ) : (
+                      <p>My Cart</p>
+                    )}
+                    {/* <p>1 items</p>
+                    <p>total price</p> */}
                   </div>
                 </div>
               </button>
