@@ -7,13 +7,13 @@ const auth = async (request, response, next) => {
       request?.headers?.authorization?.split(" ")[1];
     console.log(token);
 
-    if (!token) {
+    /* if (!token) {
       return response.status(401).json({
         message: "Unauthorized. No token provided.",
         error: true,
         success: false,
       });
-    }
+    } */
 
     const decode = await jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
     console.log(decode);
