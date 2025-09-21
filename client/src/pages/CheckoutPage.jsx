@@ -8,7 +8,7 @@ import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-//import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const CheckoutPage = () => {
   const {
@@ -58,34 +58,48 @@ const CheckoutPage = () => {
   };
 
   const handleOnlinePayment = async () => {
-    /* try {
-        toast.loading("Loading...")
-        const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY
-        const stripePromise = await loadStripe(stripePublicKey)
-       
-        const response = await Axios({
-            ...SummaryApi.payment_url,
-            data : {
-              list_items : cartItemsList,
-              addressId : addressList[selectAddress]?._id,
-              subTotalAmt : totalPrice,
-              totalAmt :  totalPrice,
-            }
-        })
+    try {
+      //toast.loading("Loading...");
+      const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+      //console.log("stripePublicKey", stripePublicKey);
+      const stripe = await loadStripe(stripePublicKey);
 
-        const { data : responseData } = response
+      if (!stripe) {
+        toast.error("Stripe failed to load");
+        return;
+      }
 
-        stripePromise.redirectToCheckout({ sessionId : responseData.id })
-        
-        if(fetchCartItem){
-          fetchCartItem()
-        }
-        if(fetchOrder){
-          fetchOrder()
-        }
+      toast.loading("Redirecting to payment...");
+
+      const response = await Axios({
+        ...SummaryApi.payment_url,
+        data: {
+          list_items: cartItemsList,
+          addressId: addressList[selectAddress]?._id,
+          subTotalAmt: totalPrice,
+          totalAmt: totalPrice,
+        },
+      });
+
+      const { data: responseData } = response;
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: responseData.id,
+      });
+
+      if (result.error) {
+        toast.error(result.error.message);
+      }
+
+      if (fetchCartItem) {
+        fetchCartItem();
+      }
+      if (fetchOrder) {
+        fetchOrder();
+      }
     } catch (error) {
-        AxiosToastError(error)
-    } */
+      AxiosToastError(error);
+    }
   };
 
   return (
