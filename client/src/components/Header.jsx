@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
-import logo2 from "../assets/logo2.png";
+import logo from "../assets/logo.webp";
+import logo2 from "../assets/logo2.webp";
 import SearchBar from "./SearchBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";

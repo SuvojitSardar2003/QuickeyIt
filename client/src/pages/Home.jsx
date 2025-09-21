@@ -1,6 +1,6 @@
 import React from "react";
 import banner from "../assets/banner.jpg";
-import bannerMobile from "../assets/banner-mobile.jpg";
+import bannerMobile from "../assets/banner-mobile.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
