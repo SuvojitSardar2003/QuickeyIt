@@ -135,3 +135,96 @@ export async function paymentController(request, response) {
     });
   }
 }
+
+const getOrderProductItems = async ({
+  lineItems,
+  userId,
+  addressId,
+  paymentId,
+  payment_status,
+}) => {
+  const productList = [];
+
+  if (lineItems?.data?.length) {
+    for (const item of lineItems.data) {
+      const product = await Stripe.products.retrieve(item.price.product);
+
+      const paylod = {
+        userId: userId,
+        orderId: `ORD-${new mongoose.Types.ObjectId()}`,
+        productId: product.metadata.productId,
+        product_details: {
+          name: product.name,
+          image: product.images,
+        },
+        paymentId: paymentId,
+        payment_status: payment_status,
+        delivery_address: addressId,
+        subTotalAmt: Number(item.amount_total / 100),
+        totalAmt: Number(item.amount_total / 100),
+      };
+
+      productList.push(paylod);
+    }
+  }
+
+  return productList;
+};
+
+//http://localhost:8080/api/order/webhook
+
+export async function webhookStripe(request, response) {
+  const event = request.body;
+  const endPointSecret = process.env.STRIPE_ENDPOINT_WEBHOOK_SECRET_KEY;
+
+  console.log("event", event);
+
+  // Handle the event
+  switch (event.type) {
+    case "checkout.session.completed":
+      const session = event.data.object;
+      const lineItems = await Stripe.checkout.sessions.listLineItems(
+        session.id
+      );
+
+      const userId = session.metadata.userId;
+
+      const orderProduct = await getOrderProductItems({
+        lineItems: lineItems,
+        userId: userId,
+        addressId: session.metadata.addressId,
+        paymentId: session.payment_intent,
+        payment_status: session.payment_status,
+      });
+
+      const order = await OrderModel.insertMany(orderProduct);
+
+      // Update product stock
+      if (orderProduct.length) {
+        for (const el of orderProduct) {
+          await ProductModel.findByIdAndUpdate(
+            el.productId, // here el.productId comes from getOrderProductItems
+            { $inc: { stock: -1 } }, // Assuming quantity is 1 per Stripe line item
+            { new: true }
+          );
+        }
+      }
+
+      //remove from the cart
+      if (Boolean(order[0])) {
+        const removeCartItems = await CartProductModel.deleteMany({
+          userId: userId,
+        });
+        const updateUser = await UserModel.findByIdAndUpdate(userId, {
+          shopping_cart: [],
+        });
+      }
+
+      break;
+
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+  // Return a response to acknowledge receipt of the event
+  response.json({ received: true });
+}
