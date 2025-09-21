@@ -62,7 +62,7 @@ const CheckoutPage = () => {
       //toast.loading("Loading...");
       const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
       //console.log("stripePublicKey", stripePublicKey);
-      const stripe = await loadStripe(stripePublicKey);
+      const stripePromise = await loadStripe(stripePublicKey);
 
       if (!stripe) {
         toast.error("Stripe failed to load");
@@ -83,7 +83,7 @@ const CheckoutPage = () => {
 
       const { data: responseData } = response;
 
-      const result = await stripe.redirectToCheckout({
+      const result = await stripePromise.redirectToCheckout({
         sessionId: responseData.id,
       });
 
