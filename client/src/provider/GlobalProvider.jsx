@@ -7,6 +7,7 @@ import AxiosToastError from "../utils/AxiosToastError";
 import toast from "react-hot-toast";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
 import { handleAddAddress } from "../store/addressSlice";
+import { setOrder } from "../store/orderSlice";
 
 export const GlobalContext = createContext(null);
 
@@ -121,10 +122,26 @@ function GlobalProvider({ children }) {
     }
   };
 
+  const fetchOrder = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getOrderItem,
+      });
+
+      const { data: responseData } = response;
+      if (responseData.success) {
+        dispatch(setOrder(responseData.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchCartItem();
     handleLogoutOut();
     fetchAddress();
+    fetchOrder();
   }, [user]);
 
   return (
@@ -137,6 +154,7 @@ function GlobalProvider({ children }) {
         totalQtyItem,
         notDiscountTotalPrice,
         fetchAddress,
+        fetchOrder,
       }}
     >
       {children}

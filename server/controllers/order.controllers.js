@@ -228,3 +228,26 @@ export async function webhookStripe(request, response) {
   // Return a response to acknowledge receipt of the event
   response.json({ received: true });
 }
+
+export async function getOrderDetailsController(request, response) {
+  try {
+    const userId = request.userId; // order id
+
+    const orderlist = await OrderModel.find({ userId: userId })
+      .sort({ createdAt: -1 })
+      .populate("delivery_address");
+
+    return response.json({
+      message: "order list",
+      data: orderlist,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
