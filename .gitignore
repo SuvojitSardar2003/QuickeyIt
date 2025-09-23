@@ -33,3 +33,8 @@ client/node_modules
 server/node_modules
 .client/.env
 .server/.env
+client/src/assets/category
+client/src/assets/sub\ category
+client/src/assets/product
+
+

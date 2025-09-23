@@ -27,5 +27,8 @@ dist-ssr
 server/.env
 client/.env
 .env
+src/assets/category
+src/assets/sub\ category
+src/assets/product
 
 
